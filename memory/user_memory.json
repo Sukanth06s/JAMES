@@ -1,0 +1,22 @@
+{
+    "user": {
+        "name": "Sukanth",
+        "interests": [
+            "coding"
+        ],
+        "learning": [],
+        "goals": [],
+        "skills": [],
+        "preferences": {
+            "communication_style": "",
+            "learning_style": ""
+        },
+        "relationships": [
+            {
+                "name": "",
+                "role": "",
+                "importance": ""
+            }
+        ]
+    }
+}

@@ -1,0 +1,7 @@
+#virtual env files
+james_v2_env/
+venv/
+env/
+#pycache files
+__pycache__/   
+*.pyc

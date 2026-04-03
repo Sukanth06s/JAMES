@@ -1,0 +1,23 @@
+{
+    "relationship": {
+        "roles": [
+            {
+                "role": "mentor",
+                "priority": 0.9
+            },
+            {
+                "role": "friend",
+                "priority": 0.6
+            }
+        ],
+        "interaction_style": {
+            "tone": "supportive",
+            "depth": "deep",
+            "challenge_level": "high"
+        },
+        "expectations": [
+            "help me grow",
+            "keep me accountable"
+        ]
+    }
+}
