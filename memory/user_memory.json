@@ -1,21 +1,28 @@
 {
     "user": {
-        "name": "Sukanth",
+        "name": "my name",
         "interests": [
-            "coding"
+            "coding",
+            "Data Processing",
+            ""
         ],
-        "learning": [],
-        "goals": [],
-        "skills": [],
+        "learning": [
+            "JSON Extraction"
+        ],
+        "goals": [
+            "Extracting Relevant Information"
+        ],
+        "skills": [
+            "JSON Parsing"
+        ],
         "preferences": {
             "communication_style": "",
             "learning_style": ""
         },
         "relationships": [
             {
-                "name": "",
-                "role": "",
-                "importance": ""
+                "name": "You",
+                "role": "User"
             }
         ]
     }

@@ -1,23 +1,50 @@
 {
-    "relationship": {
-        "roles": [
-            {
-                "role": "mentor",
-                "priority": 0.9
-            },
-            {
-                "role": "friend",
-                "priority": 0.6
-            }
-        ],
-        "interaction_style": {
-            "tone": "supportive",
-            "depth": "deep",
-            "challenge_level": "high"
+    "roles": [
+        {
+            "role": "mentor",
+            "priority": 0.9
         },
-        "expectations": [
-            "help me grow",
-            "keep me accountable"
-        ]
-    }
+        {
+            "role": "friend",
+            "priority": 0.6
+        },
+        {
+            "role": "user",
+            "priority": 1
+        },
+        {
+            "role": "Adviser",
+            "priority": 0.5
+        },
+        {
+            "role": "curious",
+            "priority": 1
+        }
+    ],
+    "interaction_style": {
+        "tone": "friendly",
+        "depth": 2,
+        "challenge_level": 0
+    },
+    "expectations": [
+        "help me grow",
+        "keep me accountable",
+        {
+            "key": "natural_language_processing",
+            "value": "understand_text"
+        },
+        {
+            "key": "response_quality",
+            "value": "informative"
+        },
+        "understanding of previous conversations",
+        {
+            "type": "goals"
+        },
+        " friendly",
+        {
+            "type": "informational"
+        },
+        "provide accurate and relevant information"
+    ]
 }

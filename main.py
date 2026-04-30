@@ -48,29 +48,58 @@ relation_memory = load_json(RELATION_FILE, RELATION_DEFAULT)
 # ---------------- MERGE FUNCTIONS ----------------
 
 def update_user_memory(new_data):
-    user = user_memory["user"]
+    if not isinstance(new_data, dict):
+        return
 
-    if "name" in new_data:
-        user["name"] = new_data["name"]
+    user = user_memory.setdefault("user", {})
 
+    # Ensure structure exists
+    user.setdefault("name", "")
+    user.setdefault("interests", [])
+    user.setdefault("learning", [])
+    user.setdefault("goals", [])
+    user.setdefault("skills", [])
+    user.setdefault("relationships", [])
+
+    # ✅ FIXED name handling (before assignment)
+    name = new_data.get("name", "").strip()
+    if name and name.lower() not in ["james", "assistant", "ai"]:
+        user["name"] = name
+
+    # Lists
     for key in ["interests", "learning", "goals", "skills"]:
-        if key in new_data:
+        if key in new_data and isinstance(new_data[key], list):
             merge_list(user[key], new_data[key])
 
-    if "relationships" in new_data:
+    # Relationships
+    if "relationships" in new_data and isinstance(new_data["relationships"], list):
         merge_relationships(user["relationships"], new_data["relationships"])
 
     save_json(USER_FILE, user_memory)
 
 
 def update_relation_memory(new_data):
-    if "roles" in new_data:
+    global relation_memory
+
+    if not isinstance(new_data, dict):
+        return
+
+    # 🔥 Normalize if nested
+    if "relationship" in new_data:
+        new_data = new_data["relationship"]
+
+    # Ensure structure exists
+    relation_memory.setdefault("roles", [])
+    relation_memory.setdefault("expectations", [])
+    relation_memory.setdefault("interaction_style", {})
+
+    if "roles" in new_data and isinstance(new_data["roles"], list):
         merge_list(relation_memory["roles"], new_data["roles"])
 
-    if "expectations" in new_data:
+    if "expectations" in new_data and isinstance(new_data["expectations"], list):
         merge_list(relation_memory["expectations"], new_data["expectations"])
 
-    if "interaction_style" in new_data:
+    if "interaction_style" in new_data and isinstance(new_data["interaction_style"], dict):
         relation_memory["interaction_style"].update(new_data["interaction_style"])
 
     save_json(RELATION_FILE, relation_memory)
@@ -101,9 +130,9 @@ User: {query}
 
     response = call_llm(prompt)
 
-    # Extract memory
-    user_data = extract_user_memory(query)
-    relation_data = extract_relation_memory(query)
+    # Extract memory safely
+    user_data = extract_user_memory(query) or {}
+    relation_data = extract_relation_memory(query) or {}
 
     update_user_memory(user_data)
     update_relation_memory(relation_data)

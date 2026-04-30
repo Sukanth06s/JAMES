@@ -6,12 +6,14 @@ def build_personality(relation_memory):
     challenge = "medium"
 
     for r in roles:
-        if r.get("role") == "mentor":
+        role = r.get("role")
+
+        if role == "mentor":
             tone = "challenging"
-        elif r.get("role") == "friend":
+        elif role == "friend":
             tone = "casual"
 
-    if "challenge_level" in style:
+    if isinstance(style, dict) and "challenge_level" in style:
         challenge = style["challenge_level"]
 
     return {

@@ -2,9 +2,6 @@ import json
 from core.llm import call_llm
 
 
-import json
-from core.llm import call_llm
-
 def extract_json(prompt):
     raw = call_llm(prompt)
 
@@ -22,13 +19,11 @@ def extract_json(prompt):
     if "```" in cleaned:
         parts = cleaned.split("```")
 
-        # Look for the block that contains JSON
         for part in parts:
             part = part.strip()
 
             if part.startswith("json"):
-                part = part[4:].strip()  # remove 'json'
-                cleaned = part
+                cleaned = part[4:].strip()
                 break
             elif part.startswith("{"):
                 cleaned = part
@@ -50,8 +45,7 @@ def extract_json(prompt):
     # STEP 3: Parse JSON safely
     # -------------------------------
     try:
-        parsed = json.loads(json_str)
-        return parsed
+        return json.loads(json_str)
 
     except json.JSONDecodeError as e:
         print("❌ JSON Decode Error:", e)
@@ -62,28 +56,15 @@ def extract_json(prompt):
         print("❌ Unexpected Error:", e)
         return {}
 
+
 def extract_user_memory(user_input):
     prompt = f"""
 You are a JSON extraction system.
 
-Extract user-related information.
-You are a JSON API.
-
 You MUST return ONLY valid JSON.
-Do NOT include:
-- explanations
-- markdown
-- ```json
-- any text outside JSON
+No markdown. No explanation.
 
-If you fail, the system will crash.
-
-Output must start with {{ and end with }}
-
-STRICT RULES:
-- Output MUST be valid JSON only
-- Do NOT include any text outside JSON
-- If nothing useful → return {{}}
+If nothing useful → return {{}}
 
 Fields:
 - name
@@ -132,4 +113,10 @@ Format:
   "interaction_style": {{}}
 }}
 """
-    return extract_json(prompt)
+    data = extract_json(prompt)
+
+    # 🔥 FIX: normalize nested structure
+    if "relationship" in data:
+        data = data["relationship"]
+
+    return data
