@@ -1,0 +1,14 @@
+# AI and LLM
+ollama
+langchain
+langchain-community
+
+# Data Validation
+pydantic
+
+# Environment Variables
+python-dotenv
+
+#run this command to install the above: python -m pip install -r requirements.txt
+#run this command to install ollama: irm https://ollama.com/install.ps1 | iex
+#run this command to install the required ollama model: ollama pull llama3.2
