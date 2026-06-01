@@ -122,3 +122,9 @@
     - Okay
     - Sure
     - Alright
+
+# Future Plan
+    Standalone observations (i.e., observations that don't belong to any episode) can be managed using a lifecycle system.
+    If an observation isn't used for 30 days, it can be marked as inactive (archived but not deleted).
+    If it remains inactive and its last access date crosses a configurable threshold (e.g., 100 days / 1 year), it can be permanently removed.
+    Observations that belong to episodes should not be deleted automatically, since they are part of a larger context.
