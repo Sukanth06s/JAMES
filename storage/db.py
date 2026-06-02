@@ -149,4 +149,51 @@ def generate_id(prefix:str)->str:
     return f"{prefix}_{str(new_count).zfill(3)}"
     #zfill(3) ->pads to 3 digits: 1->"001" 12->"012" 100->"100"
 
+# ── Observation helpers ───────────────────────────────────────────────────────
+ 
+def append_observation(observation:dict):
+    """
+    saves one observation in observation file
+    called by processor.py after building an observation object
+    """
+    append_json(OBSERVATIONS_FILE,observation)
+
+def load_all_observations()->list:
+    """
+    return every observation stored
+    """
+    return load_json(OBSERVATIONS_FILE,default=[])
+
+# ── Episode helpers ───────────────────────────────────────────────────────────
+ 
+def append_episode(episode:dict):
+    """
+    save a brand new episode to episode file
+    """
+    append_json(EPISODES_FILE,episode)
+
+def load_all_episodes()->list:
+    """
+    return every episode
+    """
+    return load_json(EPISODES_FILE,default=[])
+
+def update_episode(updated_episode:dict):
+    """
+    replace an existing episode with updated version
+    args:
+    updated_episode: the full episode dict with changes
+    """
+    episodes=load_all_episodes()
+    # find the index of episode to replace
+    for i,ep in enumerate(episodes):
+        if ep.get("episode_id")==updated_episode.get("episode_id"):
+            episodes[i]=updated_episode
+            #swap old episode out , new one in
+            save_json(EPISODES_FILE,episodes)
+            return 
+    #fallback: episode_id not found thenjust append
+    print(f"[db]WARNING: episode {updated_episode.get('episode_id')} not found - appending instead")
+    episodes.append(updated_episode)
+    save_json(EPISODES_FILE,episodes)
     

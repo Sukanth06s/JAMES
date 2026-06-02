@@ -8,3 +8,6 @@
         There is also a function named validate_observation which is called inside the create_observation, as the name suggests it validates if the observation is in correct format.
         .get() function is used to store the values that are passed from the argument as this is makes sure the code doesn't crash if they are NULL, rather store with the default value that is mentioned in the second parameter of that function.
         .isinstance() function is used to check if the value (1st parameter) is in the required format (2nd parameter) (eg list, tuple, datatype)
+
+# Day 3 (June 2, 2026):
+    Fixed some bugs that were created by Suraj from last commit (with consent), held back some of those helper functions in "db.py" as it belongs to Backend Engineer and changed _build_observation() in processor.py to create_observation() as this calls the function that I created. _find_matching_episode() BELONGS TO RETRIEVAL ENGINEER, THIS FUNCTION SHOULD BE CALLED IN processor.py RATHER THAN DEFINING IN THE SAME FILE.

@@ -9,7 +9,7 @@ this is pipeline orchestrator - it connect every module:
          ↓
     Extractor.extract()        [LLM Engineer's code]
          ↓
-    _build_observation()       [your code — constructs the observation dict]
+    create_observation()       [Memory Engineer's code — creates the observation dict]
          ↓
     db.append_observation()    [your code — persists it]
          ↓
@@ -18,10 +18,9 @@ this is pipeline orchestrator - it connect every module:
     returns response string
 """
 
-import datetime                         #for timestamping observation
+from .observation import create_observation
 from llm.extractor import Extractor     
 from storage.db import(
-    generate_id,
     append_observation,
     load_all_episodes,
     append_episode,
@@ -31,7 +30,15 @@ from storage.db import(
 # Created once so we don't reload the model on every message.
 _extractor = Extractor()
 
-
+# ── _find_matching_episode  (STUB) ────────────────────────────────────────────
+ 
+def _find_matching_episode(observation: dict):
+    """
+    stub
+    this will inspect observation's topics/entities and return an existing episode dict if one is relevant
+    for now it returns none
+    """
+    return None
 
 # ── process_input ─────────────────────────────────────────────────────────────
 
@@ -50,10 +57,10 @@ def process_input(user_message:str)->dict:
     extracted=_extractor.extract(user_message)
     print(f"[processor] Extracted : {extracted}")
 
-    # ── Step 2: Build observation ─────────────────────────────────────────
-    observation=_build_observation(user_message,extracted)
+    # ── Step 2: Call observation ─────────────────────────────────────────
+    observation=create_observation(user_message,extracted)
     #constructs the full observation dict with id, entities, timestamp,etc
-    print("[processor] Built observation: {observation['id']}")
+    print(f"[processor] Built observation: {observation['id']}")
 
     # ── Step 3: Persist observation ───────────────────────────────────────
     append_observation(observation)
@@ -70,7 +77,7 @@ def process_input(user_message:str)->dict:
         update_episode(matched_episode)
         episode_result=matched_episode
     else:
-        episode_result: None
+        episode_result= None
     print(f"[processor] Episode: {'linked to' +str(episode_result) if episode_result else 'no match(stub)'}")
 
      # ── Step 5: Return summary ────────────────────────────────────────────
