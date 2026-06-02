@@ -39,3 +39,25 @@ obs ID and extracted topics — a placeholder. The real LLM response gets
 wired in Day 9. The important thing is `ensure_memory_dir()` runs before
 anything else, so no file operation ever fails because the folder doesn't
 exist.
+
+
+
+2nd JUNE 2026
+
+After the first review with the team, a few things became clear that 
+needed correcting.
+
+The main issue was boundary creep — I had written `_build_observation()` 
+and `_find_matching_episode()` inside processor.py, but those belong to 
+the Memory Engineer and Retrieval Engineer respectively. My processor 
+should only be the orchestrator — calling their functions, not 
+reimplementing them. Same issue in db.py where I had added 
+observation/episode helpers that overlap with what the Memory Engineer 
+owns. Removed those and kept db.py strictly as a pure storage primitive 
+layer.
+
+Also fixed 7 bugs caught in review — mostly variable name typos 
+(`bservation`, `update_episode` vs `updated_episode`, `episode` vs 
+`episodes`) and a wrong assignment operator (`:` instead of `=`).
+
+The boundary lesson here: backend owns the pipe, not the data logic.

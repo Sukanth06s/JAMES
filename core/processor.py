@@ -31,44 +31,7 @@ from storage.db import(
 # Created once so we don't reload the model on every message.
 _extractor = Extractor()
 
-# ── _build_observation ───────────────────────────────────────────────────────
 
-def _build_observation(raw_text:str,extracted:dict)->dict:
-    """
-    combine the raw user text with LLM-extracted signals into a single structured
-    observation dict that matches the schema
-
-    args:
-    raw_text:the original message user typed
-    extracted:dict returned  by Extractor
-
-    returns a complete observation dict ready to be stored
-    """
-
-    return{
-        "id":generate_id("obj"),
-        "text":raw_text,
-        "entities":extracted.get("entities",[]),
-        # named things mentioned: ppl, tools, project
-        "topics":extracted.get("topics",[]),
-        "intent":extracted.get("intent",""),
-        # what user is doing:debugging,planning
-        "importance":extracted.get("importance",0.0),
-        #how significant it is
-        "timestamp":datetime.datetime.utcnow().isoformat()+"2",
-        "episode_id":None
-        #will be filled when episode matching is done
-    }
-
-# ── _find_matching_episode  (STUB) ────────────────────────────────────────────
- 
-def _find_matching_episode(observation: dict):
-    """
-    stub
-    this will inspect observation's topics/entities and return an existing episode dict if one is relevant
-    for now it returns none
-    """
-    return None
 
 # ── process_input ─────────────────────────────────────────────────────────────
 
