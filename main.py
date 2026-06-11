@@ -36,16 +36,20 @@ def main():
         if not user_input:
             continue
         if user_input.lower()=="exit":
-            print("JAMES:Goodbye")
+            print("JAMES: Goodbye")
             break
      # ── Run the memory pipeline ───────────────────────────────────────
-    result=process_input(user_input)
-    intent    = result["extracted"].get("intent", "")
-    topics    = result["extracted"].get("topics", [])
-    obs_id    = result["observation"]["id"]
-    print(f"\nJames: Got it. [{obs_id}] "
-          f"Intent: {intent or 'unknown'} | "
-          f"Topics: {', '.join(topics) if topics else 'none detected'}")
+        result=process_input(user_input)
+        obs=result["observation"]
+        if obs is None:
+            print("\nJames: Message received. No meaningful memory extracted.")
+            continue
+        intent    = obs.get("intent", "")
+        topics    = obs.get("topics", [])
+        obs_id    = obs["id"]
+        print(f"\nJames: Got it. [{obs_id}] "
+            f"Intent: {intent or 'unknown'} | "
+            f"Topics: {', '.join(topics) if topics else 'none detected'}")
     
     # ── Entry point guard ─────────────────────────────────────────────────────────
 if __name__ == "__main__":

@@ -19,6 +19,7 @@ this is pipeline orchestrator - it connect every module:
 """
 
 from .observation import create_observation
+from .episode import (create_episode, add_observation_to_episode, find_matching_episode)
 from llm.extractor import Extractor     
 from storage.db import(
     append_observation,
@@ -29,16 +30,6 @@ from storage.db import(
 # ── Module-level extractor instance ──────────────────────────────────────────
 # Created once so we don't reload the model on every message.
 _extractor = Extractor()
-
-# ── _find_matching_episode  (STUB) ────────────────────────────────────────────
- 
-def _find_matching_episode(observation: dict):
-    """
-    stub
-    this will inspect observation's topics/entities and return an existing episode dict if one is relevant
-    for now it returns none
-    """
-    return None
 
 # ── process_input ─────────────────────────────────────────────────────────────
 
@@ -57,7 +48,15 @@ def process_input(user_message:str)->dict:
     extracted=_extractor.extract(user_message)
     print(f"[processor] Extracted : {extracted}")
 
-    # ── Step 2: Call observation ─────────────────────────────────────────
+    # ── Step 2: Check if observation worthy and build if needed ─────────────────────────────────────────
+    if (not extracted.get("topics") and not extracted.get("entities")) and extracted.get("intent")=="none":
+        print("[processor] No meaningful memory extracted")
+        return {
+            "observation": None,
+            "episode": None,
+            "extracted": extracted
+        }
+
     observation=create_observation(user_message,extracted)
     #constructs the full observation dict with id, entities, timestamp,etc
     print(f"[processor] Built observation: {observation['id']}")
@@ -69,7 +68,7 @@ def process_input(user_message:str)->dict:
     print(f"[processor] Saved observation {observation['id']} to disk")
 
      # ── Step 4: Episode matching  ────────────────────────────────────────
-    matched_episode=_find_matching_episode(observation)
+    matched_episode=find_matching_episode(observation)
 
     if matched_episode:
         #update an existing episode with this observation

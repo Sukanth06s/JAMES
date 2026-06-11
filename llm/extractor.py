@@ -24,6 +24,6 @@ class Extractor:
             print("Invalid JSON")
             return {
                 "topics": [],
-                "entity": [],
+                "entities": [],
                 "intent": ""
             }

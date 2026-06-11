@@ -11,3 +11,8 @@
 
 # Day 3 (June 2, 2026):
     Fixed some bugs that were created by Suraj from last commit (with consent), held back some of those helper functions in "db.py" as it belongs to Backend Engineer and changed _build_observation() in processor.py to create_observation() as this calls the function that I created. _find_matching_episode() BELONGS TO RETRIEVAL ENGINEER, THIS FUNCTION SHOULD BE CALLED IN processor.py RATHER THAN DEFINING IN THE SAME FILE.
+
+# Day 4 (June 11, 2026):
+    Defined the schema for episodes and rules for creating/updating any episode, refer to memory_rules.md for more details. 
+    Changed "entity" field name to "entities" in extraction-related files, as this is crucial.
+    Added an important logic in processor.py to ignore non-observation worthy responses from user, as the previous code would still create an observation for them (like an empty json but only with an observation id). Because of which, main.py too undergone some changes with this logic and also fixed a small indent error.

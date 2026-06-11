@@ -10,7 +10,7 @@ def build_prompt(message):
     Schema:
     {{
         "topics": [],
-        "entity": [],
+        "entities": [],
         "intent": ""
     }}
 

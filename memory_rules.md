@@ -1,4 +1,4 @@
-***These are the rules and information that should be considered while extracting data from the user's prompt.***
+# These are the rules and information that should be considered while extracting data from the user's prompt.
 1. Observation Schema:
     {
         "id": "",
@@ -123,6 +123,41 @@
     - Sure
     - Alright
 
+# These are the rules and information that should be considered for creating a new episode or updating an existing episode.
+1. Episode Schema:
+    {
+        "episode_id": "",
+
+        "title": "",
+        
+        "status": "",
+        
+        "topics": [],
+        
+        "participants": [],
+        
+        "related_observations": [],
+        
+        "created_at": "",
+        
+        "last_updated": "",
+        
+        "metadata": {}
+    }
+
+2. Title:
+    This is a small string which gives a note about what a particular episode is used for.
+
+3. Status:
+    This just says if the episode is active (used recently), inactive (used a long time ago), or closed.
+
+4. **When to create/update:**
+    - Updation:
+        This is the first step. When a new observation is created, it should check with already existing episodes, if they tend to match, then this observation is also linked to that existing episode.
+    - Creation:
+        When the above process fails, i.e, if the observation doesn't match with any existing episodes, then the next step, it should check with previously existing observations, if atleast any 2 observations (or more) match, a new episode will be created with respect to these observations.
+    - If all the above steps fail, then they just exist as a standalone observation.
+ 
 # Future Plan
     Standalone observations (i.e., observations that don't belong to any episode) can be managed using a lifecycle system.
     If an observation isn't used for 30 days, it can be marked as inactive (archived but not deleted).
