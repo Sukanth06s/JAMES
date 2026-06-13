@@ -1,6 +1,7 @@
 from datetime import datetime
 from storage.db import generate_id
-from .observation import validate_observation
+from core.observation import validate_observation
+
 
 def get_current_time():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -37,18 +38,22 @@ def validate_episode(episode):
         return False
     return True
 
-def add_observation_to_episode(epis, obs):
-    if not validate_episode(epis):
+def update_episode_with_observation(
+    episode: dict,
+    observation: dict
+) -> dict:
+    
+    if not validate_episode(episode):
         raise ValueError("Invalid episode")
-    if not validate_observation(obs):
+    if not validate_observation(observation):
         raise ValueError("Invalid observation")
 
-    for i in obs["topics"]:
-        if i not in epis["topics"]:
-            epis["topics"].append(i)
-    epis["related_observations"].append(obs["id"])
-    epis["last_updated"] = get_current_time()
-    return epis
+    for i in observation["topics"]:
+        if i not in episode["topics"]:
+            episode["topics"].append(i)
+    episode["related_observations"].append(observation["id"])
+    episode["last_updated"] = get_current_time()
+    return episode
 
 def find_matching_episode():
     return None

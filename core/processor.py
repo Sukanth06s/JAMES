@@ -19,7 +19,10 @@ this is pipeline orchestrator - it connect every module:
 """
 
 from core.observation import create_observation
-from llm.extractor import Extractor     
+from llm.extractor import Extractor    
+from core.episode import ( 
+    update_episode_with_observation
+)
 from storage.db import(
     append_observation,
     load_all_episodes,
@@ -90,14 +93,7 @@ def process_input(user_message: str) -> dict:
 
             if matched is not None:
                 # 5a. Link observation to the existing matched episode
-                if "related_observations" not in matched:
-                    matched["related_observations"] = []
-                    
-                matched["related_observations"].append(observation["id"])
-            
-                # Update last updated timestamp
-                from datetime import datetime
-                matched["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                matched = update_episode_with_observation(matched, observation)
                 update_episode(matched)
                 matched_or_new_episode = matched
                 status = "matched"
