@@ -21,7 +21,9 @@ this is pipeline orchestrator - it connect every module:
 from core.observation import create_observation
 from llm.extractor import Extractor    
 from core.episode import ( 
-    update_episode_with_observation
+    update_episode_with_observation,
+    find_matching_episode,
+    create_episode
 )
 from storage.db import(
     append_observation,
@@ -29,16 +31,6 @@ from storage.db import(
     append_episode,
     update_episode,
 )
-
-# ── Dynamic Episode Helpers Import ──────────────────────────────────────────
-# Attempt to import episode helpers. If the Retrieval Engineer's module is incomplete
-# or contains syntax/import errors, we fall back gracefully to avoid crashing.
-try:
-    from core.episode import find_matching_episode, create_episode
-except (ImportError, SyntaxError) as e:
-    print(f"[processor] WARNING: Could not import episode helpers. Error: {e}")
-    find_matching_episode = None
-    create_episode = None
 
 # ── Module-level extractor instance ──────────────────────────────────────────
 # Created once so we don't reload the model on every message.
@@ -105,15 +97,8 @@ def process_input(user_message: str) -> dict:
                     # If the Retrieval Engineer's code throws a TypeError due to requiring its
                     # actual signature: create_episode(title, list_of_obs, topics, participants)
                     # we fallback gracefully to pass individual parameters.
-                    try:
-                        new_episode = create_episode(observation)
-                    except TypeError:
-                        title = f"Episode about {', '.join(observation.get('topics', []))[:30]}"
-                        list_of_obs = [observation['id']]
-                        topics = observation.get("topics", [])
-                        participants = observation.get("entities", [])
-                        new_episode = create_episode(title, list_of_obs, topics, participants)
-                    
+
+                    new_episode = create_episode(observation)                  
                     append_episode(new_episode)
                     matched_or_new_episode = new_episode
                     status = "created"
