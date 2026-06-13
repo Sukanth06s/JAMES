@@ -18,8 +18,7 @@ this is pipeline orchestrator - it connect every module:
     returns response string
 """
 
-from .observation import create_observation
-from .episode import (create_episode, add_observation_to_episode, find_matching_episode)
+from core.observation import create_observation
 from llm.extractor import Extractor     
 from storage.db import(
     append_observation,
@@ -27,17 +26,28 @@ from storage.db import(
     append_episode,
     update_episode,
 )
+
+# ── Dynamic Episode Helpers Import ──────────────────────────────────────────
+# Attempt to import episode helpers. If the Retrieval Engineer's module is incomplete
+# or contains syntax/import errors, we fall back gracefully to avoid crashing.
+try:
+    from core.episode import find_matching_episode, create_episode
+except (ImportError, SyntaxError) as e:
+    print(f"[processor] WARNING: Could not import episode helpers. Error: {e}")
+    find_matching_episode = None
+    create_episode = None
+
 # ── Module-level extractor instance ──────────────────────────────────────────
 # Created once so we don't reload the model on every message.
 _extractor = Extractor()
 
 # ── process_input ─────────────────────────────────────────────────────────────
 
-def process_input(user_message:str)->dict:
+def process_input(user_message: str) -> dict:
     """
     main pipeline entry point - called once per user message
     steps:
-        1. extract structred signals from the message(LLM)
+        1. extract structured signals from the message (LLM)
         2. build a complete observation object
         3. persist the observation to disk
         4. try to link observation to an existing episode (stub)
@@ -45,43 +55,85 @@ def process_input(user_message:str)->dict:
     """
     # ── Step 1: Extract ───────────────────────────────────────────────────
     print("[processor] Extracting signals from message.....")
-    extracted=_extractor.extract(user_message)
+    extracted = _extractor.extract(user_message)
     print(f"[processor] Extracted : {extracted}")
 
-    # ── Step 2: Check if observation worthy and build if needed ─────────────────────────────────────────
-    if (not extracted.get("topics") and not extracted.get("entities")) and extracted.get("intent")=="none":
+    # ── Step 2: Check if observation worthy and build if needed ───────────
+    if (not extracted.get("topics") and not extracted.get("entities")) and extracted.get("intent") == "none":
         print("[processor] No meaningful memory extracted")
         return {
             "observation": None,
             "episode": None,
-            "extracted": extracted
+            "extracted": extracted,
+            "status": "skipped"
         }
 
-    observation=create_observation(user_message,extracted)
-    #constructs the full observation dict with id, entities, timestamp,etc
+    # ASSUMPTION: Memory Engineer's create_observation signature is create_observation(text, extracted)
+    # Aligning with core/observation.py: create_observation(t, d)
+    observation = create_observation(user_message, extracted)
     print(f"[processor] Built observation: {observation['id']}")
 
     # ── Step 3: Persist observation ───────────────────────────────────────
     append_observation(observation)
-    #append to memory/observation.json atomically
-
     print(f"[processor] Saved observation {observation['id']} to disk")
 
-     # ── Step 4: Episode matching  ────────────────────────────────────────
-    matched_episode=find_matching_episode(observation)
+    # ── Step 4 & 5: Episode Matching and Lifecycle ────────────────────────
+    matched_or_new_episode = None
+    status = "no_episode_logic"
 
-    if matched_episode:
-        #update an existing episode with this observation
-        matched_episode["related_observations"].append(observation["id"])
-        update_episode(matched_episode)
-        episode_result=matched_episode
+    if find_matching_episode is not None:
+        try:
+            episodes = load_all_episodes()
+            # ASSUMPTION: Retrieval Engineer's find_matching_episode signature is:
+            # find_matching_episode(observation: dict, episodes: list) -> dict | None
+            matched = find_matching_episode(observation, episodes)
+
+            if matched is not None:
+                # 5a. Link observation to the existing matched episode
+                if "related_observations" not in matched:
+                    matched["related_observations"] = []
+                    
+                matched["related_observations"].append(observation["id"])
+            
+                # Update last updated timestamp
+                from datetime import datetime
+                matched["last_updated"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                update_episode(matched)
+                matched_or_new_episode = matched
+                status = "matched"
+                print(f"[processor] Observation linked to existing episode : {matched['episode_id']}")
+            else:
+                # 5b. Create a new episode if no match is found
+                if create_episode is not None:
+                    # ASSUMPTION: We attempt to call create_episode(observation) as requested.
+                    # If the Retrieval Engineer's code throws a TypeError due to requiring its
+                    # actual signature: create_episode(title, list_of_obs, topics, participants)
+                    # we fallback gracefully to pass individual parameters.
+                    try:
+                        new_episode = create_episode(observation)
+                    except TypeError:
+                        title = f"Episode about {', '.join(observation.get('topics', []))[:30]}"
+                        list_of_obs = [observation['id']]
+                        topics = observation.get("topics", [])
+                        participants = observation.get("entities", [])
+                        new_episode = create_episode(title, list_of_obs, topics, participants)
+                    
+                    append_episode(new_episode)
+                    matched_or_new_episode = new_episode
+                    status = "created"
+                    print(f"[processor] Created new episode: {new_episode['episode_id']}")
+                else:
+                    print(f"[processor] WARNING: create_episode is missing/none. skipping creation")
+        except Exception as e:
+            status = "error"
+            print(f"[processor] ERROR: Failed during episode stage: {e}")
     else:
-        episode_result= None
-    print(f"[processor] Episode: {'linked to' +str(episode_result) if episode_result else 'no match(stub)'}")
+        print("[processor] WARNING: find_matching_episode is missing/None. Skipping episode stage.")
 
-     # ── Step 5: Return summary ────────────────────────────────────────────
+    # ── Step 6: Return summary ────────────────────────────────────────────
     return {
-        "observation":observation,
-        "episode":episode_result,
-        "extracted":extracted,
+        "observation": observation,
+        "episode": matched_or_new_episode,
+        "extracted": extracted,
+        "status": status
     }

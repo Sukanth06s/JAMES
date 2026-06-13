@@ -44,17 +44,44 @@ def main():
         if obs is None:
             print("\nJames: Message received. No meaningful memory extracted.")
             continue
+        # Display extracted observation signals
+        obs_id = obs.get("id", "N/A")
         intent    = obs.get("intent", "")
         topics    = obs.get("topics", [])
         obs_id    = obs["id"]
-        print(f"\nJames: Got it. [{obs_id}] "
-            f"Intent: {intent or 'unknown'} | "
-            f"Topics: {', '.join(topics) if topics else 'none detected'}")
-    
-    # ── Entry point guard ─────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    main()
-    # Only runs when you execute `python main.py` directly.
-    # Does NOT run when another module imports main.py.
- 
- 
+        print(f"\nJames: Got it. [{obs_id}] ")
+        print(f"  Intent: {intent or 'unknown'} | Topics: {', '.join(topics) if topics else 'none detected'}")
+
+        # display episode linking status
+        episode=result.get("episode")
+        status=result.get("status")
+
+        if status =="matched" and episode:
+            ep_id=episode.get("episode_id","N/A")
+            ep_title=episode.get("title","untitled")
+            ep_topics=episode.get("topics",[])
+            print(f"  → Linked to existing episode [{ep_id}]: \"{ep_title}\"")
+            if ep_topics:
+                print(f"    Episode Topics: {', '.join(ep_topics)}")
+        elif status == "created" and episode:
+            ep_id = episode.get("episode_id", "N/A")
+            ep_title = episode.get("title", "Untitled")
+            ep_topics = episode.get("topics", [])
+            print(f"  → Created new episode [{ep_id}]: \"{ep_title}\"")
+            if ep_topics:
+                print(f"    Episode Topics: {', '.join(ep_topics)}")
+                
+        elif status == "skipped":
+            print("  → Episode linking skipped (non-memory-worthy message).")
+        elif status == "no_episode_logic":
+            print("  → Episode matching skipped (episode module not ready/fully integrated).")
+        elif status == "no_create_episode":
+            print("  → Episode matched None, but new episode creation is not ready.")
+        elif status == "error":
+            print("  → Episode matching error (failed during run).")
+        else:
+            print("  → Episode matching status: Pending / Not active.")
+
+
+
+
