@@ -61,3 +61,7 @@ Also fixed 7 bugs caught in review — mostly variable name typos
 `episodes`) and a wrong assignment operator (`:` instead of `=`).
 
 The boundary lesson here: backend owns the pipe, not the data logic.
+
+13 JUNE 2026
+return none for an incomplete function find_matching_episode
+in imports corrected .storage.db to storage.db

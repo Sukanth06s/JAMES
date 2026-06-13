@@ -1,5 +1,5 @@
 from datetime import datetime
-from .storage.db import generate_id
+from storage.db import generate_id
 
 def create_observation(t, d):
     o = {

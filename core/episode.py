@@ -1,5 +1,5 @@
 from datetime import datetime
-from .storage.db import generate_id
+from storage.db import generate_id
 from .observation import validate_observation
 
 def get_current_time():
@@ -51,3 +51,4 @@ def add_observation_to_episode(epis, obs):
     return epis
 
 def find_matching_episode():
+    return None
