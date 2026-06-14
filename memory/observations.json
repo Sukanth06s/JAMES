@@ -1,0 +1,27 @@
+[
+    {
+        "id": "obj_001",
+        "text": "hello this is sukanth im working on a robotic arm",
+        "timestamp": "2026-06-14 08:51:07",
+        "topics": [
+            "robotics"
+        ],
+        "entities": [
+            "sukanth",
+            "robotic arm"
+        ],
+        "intent": "introduction",
+        "metadata": {}
+    },
+    {
+        "id": "obj_002",
+        "text": "can u tell me how to make a robotic arm in detail",
+        "timestamp": "2026-06-14 08:51:40",
+        "topics": [
+            "robotics"
+        ],
+        "entities": [],
+        "intent": "request information",
+        "metadata": {}
+    }
+]

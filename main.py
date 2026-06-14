@@ -82,6 +82,5 @@ def main():
         else:
             print("  → Episode matching status: Pending / Not active.")
 
-
-
-
+if __name__ == "__main__":
+    main()
