@@ -16,3 +16,7 @@
     Defined the schema for episodes and rules for creating/updating any episode, refer to memory_rules.md for more details. 
     Changed "entity" field name to "entities" in extraction-related files, as this is crucial.
     Added an important logic in processor.py to ignore non-observation worthy responses from user, as the previous code would still create an observation for them (like an empty json but only with an observation id). Because of which, main.py too undergone some changes with this logic and also fixed a small indent error.
+
+# Day 5 (June 15, 2026):
+    Fixed some small bugs in main.py and fixed a logic in processor.py, and also fixed the ".pyc" to "*.pyc" as only this will remove any .pyc files which are just useless for our project (used only by python hence which is irrelevant for us).
+    And mainly removed the existing py cache files which are just irrelevant.

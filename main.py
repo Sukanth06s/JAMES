@@ -45,7 +45,6 @@ def main():
             print("\nJames: Message received. No meaningful memory extracted.")
             continue
         # Display extracted observation signals
-        obs_id = obs.get("id", "N/A")
         intent    = obs.get("intent", "")
         topics    = obs.get("topics", [])
         obs_id    = obs["id"]
