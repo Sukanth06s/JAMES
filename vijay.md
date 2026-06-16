@@ -20,3 +20,6 @@
 # Day 5 (June 15, 2026):
     Fixed some small bugs in main.py and fixed a logic in processor.py, and also fixed the ".pyc" to "*.pyc" as only this will remove any .pyc files which are just useless for our project (used only by python hence which is irrelevant for us).
     And mainly removed the existing py cache files which are just irrelevant.
+
+# Day 6 (June 16, 2026):
+    Defined the code in schema.py file, this returns the pure schema of both the observation and episode layer, more like a helper function. Also deleted a print statement in main.py which is unnecessary.

@@ -20,7 +20,6 @@ def main():
     """
     print("=" * 50)
     print("  James — Persistent Adaptive Assistant")
-    print("  (Day 2 build — memory pipeline active)")
     print("  Type 'exit' to quit.")
     print("=" * 50)
  
