@@ -125,7 +125,7 @@ def find_matching_episode(
             best_score = score
             best_episode = episode
 
-    MATCH_THRESHOLD = 4
+    MATCH_THRESHOLD = 3
 
     if best_score >= MATCH_THRESHOLD:
         return best_episode
