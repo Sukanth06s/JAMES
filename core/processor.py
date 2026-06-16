@@ -54,7 +54,7 @@ def process_input(user_message: str) -> dict:
     print(f"[processor] Extracted : {extracted}")
 
     # ── Step 2: Check if observation worthy and build if needed ───────────
-    if (not extracted.get("topics") and not extracted.get("entities")) and extracted.get("intent") == "none":
+    if (not extracted.get("topics") and not extracted.get("entities")) and (extracted.get("intent") == "none" or extracted.get("intent") == ""):
         print("[processor] No meaningful memory extracted")
         return {
             "observation": None,
