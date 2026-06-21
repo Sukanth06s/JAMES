@@ -30,7 +30,11 @@ def main():
 
      # ── Chat loop ─────────────────────────────────────────────────────────
     while True:
-        user_input=input("\nYou: ").strip()
+        try:
+            user_input=input("\nYou: ").strip()
+        except (KeyboardInterrupt,EOFError):
+            print("\nJAMES: Goodbye")
+            break
 
         if not user_input:
             continue
@@ -61,6 +65,7 @@ def main():
             print(f"  → Linked to existing episode [{ep_id}]: \"{ep_title}\"")
             if ep_topics:
                 print(f"    Episode Topics: {', '.join(ep_topics)}")
+                
         elif status == "created" and episode:
             ep_id = episode.get("episode_id", "N/A")
             ep_title = episode.get("title", "Untitled")
@@ -71,10 +76,6 @@ def main():
                 
         elif status == "skipped":
             print("  → Episode linking skipped (non-memory-worthy message).")
-        elif status == "no_episode_logic":
-            print("  → Episode matching skipped (episode module not ready/fully integrated).")
-        elif status == "no_create_episode":
-            print("  → Episode matched None, but new episode creation is not ready.")
         elif status == "error":
             print("  → Episode matching error (failed during run).")
         else:

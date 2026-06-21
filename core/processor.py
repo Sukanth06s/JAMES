@@ -63,8 +63,7 @@ def process_input(user_message: str) -> dict:
             "status": "skipped"
         }
 
-    # ASSUMPTION: Memory Engineer's create_observation signature is create_observation(text, extracted)
-    # Aligning with core/observation.py: create_observation(t, d)
+    # Build observation object
     observation = create_observation(user_message, extracted)
     print(f"[processor] Built observation: {observation['id']}")
 
@@ -74,42 +73,33 @@ def process_input(user_message: str) -> dict:
 
     # ── Step 4 & 5: Episode Matching and Lifecycle ────────────────────────
     matched_or_new_episode = None
-    status = "no_episode_logic"
+    status = "error"
 
-    if find_matching_episode is not None:
-        try:
-            episodes = load_all_episodes()
-            # ASSUMPTION: Retrieval Engineer's find_matching_episode signature is:
-            # find_matching_episode(observation: dict, episodes: list) -> dict | None
-            matched = find_matching_episode(observation, episodes)
+    
+    try:
+        episodes = load_all_episodes()
+        matched = find_matching_episode(observation, episodes)
 
-            if matched is not None:
-                # 5a. Link observation to the existing matched episode
-                matched = update_episode_with_observation(matched, observation)
-                update_episode(matched)
-                matched_or_new_episode = matched
-                status = "matched"
-                print(f"[processor] Observation linked to existing episode : {matched['episode_id']}")
-            else:
-                # 5b. Create a new episode if no match is found
-                if create_episode is not None:
-                    # ASSUMPTION: We attempt to call create_episode(observation) as requested.
-                    # If the Retrieval Engineer's code throws a TypeError due to requiring its
-                    # actual signature: create_episode(title, list_of_obs, topics, participants)
-                    # we fallback gracefully to pass individual parameters.
-
-                    new_episode = create_episode(observation)                  
-                    append_episode(new_episode)
-                    matched_or_new_episode = new_episode
-                    status = "created"
-                    print(f"[processor] Created new episode: {new_episode['episode_id']}")
-                else:
-                    print(f"[processor] WARNING: create_episode is missing/none. skipping creation")
-        except Exception as e:
-            status = "error"
-            print(f"[processor] ERROR: Failed during episode stage: {e}")
-    else:
-        print("[processor] WARNING: find_matching_episode is missing/None. Skipping episode stage.")
+        if matched is not None:
+            # 5a. Link observation to the existing matched episode
+            matched = update_episode_with_observation(matched, observation)
+            update_episode(matched)
+            matched_or_new_episode = matched
+            status = "matched"
+            print(f"[processor] Observation linked to existing episode : {matched['episode_id']}")
+        else:
+            # create a new episode if no match is found
+            new_episode = create_episode(observation)                  
+            append_episode(new_episode)
+            matched_or_new_episode = new_episode
+            status = "created"
+            print(f"[processor] Created new episode: {new_episode['episode_id']}")
+    except ValueError as ve:
+            # Propagate schema validation failures so they are caught immediately during testing
+            raise ve
+    except Exception as e:
+         status="error"
+         print(f"\n[processor] !!! ERROR: failed during episode stage: {e}!!!\n")
 
     # ── Step 6: Return summary ────────────────────────────────────────────
     return {

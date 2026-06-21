@@ -78,3 +78,81 @@ With Day 6, the full episode lifecycle is now integrated. Here is how and why I 
 * **Enhanced Main Loop UI:** I refactored the chat loop in `main.py` to unpack the updated return dict from the processor. Instead of just printing the observation ID, it now prints the real-time status of the memory layers—clearly stating if an observation was linked to an existing episode, if a new one was spun up (displaying titles/topics), or if the message was skipped.
 
 This sets up a rock-solid, error-tolerant foundation for Day 9 (LLM response generation), which can now immediately rely on a cohesive observation-to-episode lifecycle.
+
+
+# 21 JUNE 2026
+
+Continuing from the Day 6 entry (June 13th), today's job was to actually 
+turn on the real episode logic instead of the safety-net version I built 
+earlier, and then test the whole thing by actually running the app.
+
+### Why I changed processor.py
+
+On Day 6, I didn't fully trust that core/episode.py would be ready or 
+bug-free, so I wrapped everything in "is this even available?" checks 
+and a fallback that tried to guess a different function signature if the 
+real one failed. That was the safe move at the time, but it also meant 
+the code had extra guard checks that didn't actually do anything anymore.
+
+Now that core/episode.py is finished and confirmed working by the team, 
+those guard checks (`if find_matching_episode is not None`, the TypeError 
+fallback, the comment about a 4-parameter create_episode signature) are 
+just leftover clutter. If the import had failed, Python would crash with 
+an ImportError at the very top of the file anyway — these checks could 
+never actually trigger. So I removed all of that and simplified the code 
+down to what it should always have been: call the function, trust the 
+function, move on.
+
+The other real change is how errors are handled. Before, every single 
+error (including real schema bugs from validate_episode or 
+validate_observation) got caught by one big "except Exception" and just 
+printed quietly. That's dangerous because it hides actual bugs in the 
+data instead of showing them. Now I split it: if it's a ValueError 
+(meaning the episode or observation data is genuinely broken/invalid), 
+the program crashes loudly with the full error so I can see exactly what 
+went wrong while testing. Any other unexpected error still gets caught 
+and logged, but doesn't get hidden behind a fake "everything is fine" 
+message.
+
+### Why I changed main.py
+
+The old version had status messages like "no_episode_logic" and 
+"no_create_episode" — these were only ever relevant when episode.py 
+wasn't built yet. Since it's done now, those statuses can never actually 
+happen, so I removed them and kept only the real outcomes the pipeline 
+can produce: matched, created, skipped, or error.
+
+
+Lastly, I wrapped the input() call in a try/except so pressing Ctrl+C 
+closes the app cleanly with a goodbye message instead of throwing an 
+ugly error in the terminal.
+
+### What I tested
+
+I ran the app end-to-end with a sequence of real messages:
+1. A first message about coding with Jason in Python → correctly created 
+   a new episode.
+2. A question about the weather → correctly created a separate episode, 
+   since it had a real topic and intent (not actually empty), so the 
+   skip-check correctly did NOT trigger here. This is expected behavior, 
+   not a bug — only messages with no topics, no entities, and no intent 
+   get skipped.
+3. A message about baking → correctly created another separate episode, 
+   since it shares nothing with the coding or weather episodes.
+4. A message about debugging Python with Jason → correctly matched and 
+   linked back to the original coding episode instead of making a new 
+   one.
+5. Closed and restarted the app, then sent another Python-related 
+   message → it correctly remembered the old episode from before and 
+   linked to it, proving memory actually persists across restarts.
+
+Everything worked exactly as the pipeline is designed to. No crashes 
+during this run.
+
+### What this means going forward
+
+The pipeline is now fully wired end-to-end and behaves correctly under 
+normal use, including after a restart. The next thing to verify (not 
+done yet) is the corrupted-file edge case — what happens if 
+episodes.json gets damaged somehow — to make sure the app doesn't crash 
+in that situation either.
