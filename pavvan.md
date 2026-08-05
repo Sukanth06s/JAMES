@@ -25,3 +25,11 @@ llm/extractor.py
 
 for testing it is run by the command: python -m tests.test_pipeline
 might get error 429. it means overload to the model.
+
+
+05.08.2026
+client.py
+- added ollama client for presentation purpose if we dont get internet there (but ollama is slower than groq)
+extractor.py
+- introduced USE_GROQ(hardcoded gateway). if USE_GROQ=1, groq client is used or else ollama client is used
+- recieved the response of both llms in the same variable content
