@@ -1,0 +1,706 @@
+[
+    {
+        "number": 1,
+        "message": "hello",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 1.462
+    },
+    {
+        "number": 2,
+        "message": "Good morning!",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.572
+    },
+    {
+        "number": 3,
+        "message": "thanks",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.769
+    },
+    {
+        "number": 4,
+        "message": "okay, got it",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.799
+    },
+    {
+        "number": 5,
+        "message": "yes",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.67
+    },
+    {
+        "number": 6,
+        "message": "bye",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.886
+    },
+    {
+        "number": 7,
+        "message": "that's great",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 1.395
+    },
+    {
+        "number": 8,
+        "message": "haha nice",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.587
+    },
+    {
+        "number": 9,
+        "message": "cool",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.736
+    },
+    {
+        "number": 10,
+        "message": "I see",
+        "result": {
+            "topics": [],
+            "entities": [],
+            "intent": ""
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.491
+    },
+    {
+        "number": 11,
+        "message": "I'm learning machine learning.",
+        "result": {
+            "topics": [
+                "machine learning"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 1.187
+    },
+    {
+        "number": 12,
+        "message": "I'm studying neural networks.",
+        "result": {
+            "topics": [
+                "neural networks"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 2.29
+    },
+    {
+        "number": 13,
+        "message": "I'm learning Python for data science.",
+        "result": {
+            "topics": [
+                "Python",
+                "data science"
+            ],
+            "entities": [
+                "Python",
+                "data science"
+            ],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.806
+    },
+    {
+        "number": 14,
+        "message": "What is an API?",
+        "result": {
+            "topics": [
+                "API"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.698
+    },
+    {
+        "number": 15,
+        "message": "How does REST work?",
+        "result": {
+            "topics": [
+                "REST",
+                "HTTP",
+                "web services"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.555
+    },
+    {
+        "number": 16,
+        "message": "How do I use FastAPI?",
+        "result": {
+            "topics": [
+                "FastAPI",
+                "Python web frameworks"
+            ],
+            "entities": [
+                "FastAPI"
+            ],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.593
+    },
+    {
+        "number": 17,
+        "message": "I'm learning about gradient descent.",
+        "result": {
+            "topics": [
+                "gradient descent"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.543
+    },
+    {
+        "number": 18,
+        "message": "I'm studying computer networks.",
+        "result": {
+            "topics": [
+                "computer networks"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.622
+    },
+    {
+        "number": 19,
+        "message": "I'm learning about operating systems.",
+        "result": {
+            "topics": [
+                "Operating Systems"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 0.3
+    },
+    {
+        "number": 20,
+        "message": "I'm studying database normalization.",
+        "result": {
+            "topics": [
+                "database normalization"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 5.171
+    },
+    {
+        "number": 21,
+        "message": "I'm building a chatbot with Python.",
+        "result": {
+            "topics": [
+                "chatbot",
+                "Python"
+            ],
+            "entities": [
+                "Python",
+                "chatbot"
+            ],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.858
+    },
+    {
+        "number": 22,
+        "message": "I'm implementing a CNN for image classification.",
+        "result": {
+            "topics": [
+                "Convolutional Neural Networks",
+                "image classification"
+            ],
+            "entities": [
+                "CNN",
+                "image classification"
+            ],
+            "intent": "implementing"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 5.963
+    },
+    {
+        "number": 23,
+        "message": "I'm developing a REST API using Flask.",
+        "result": {
+            "topics": [
+                "REST API",
+                "Flask"
+            ],
+            "entities": [
+                "Flask"
+            ],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 6.464
+    },
+    {
+        "number": 24,
+        "message": "I'm building a healthcare application.",
+        "result": {
+            "topics": [
+                "healthcare application",
+                "building"
+            ],
+            "entities": [],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 1.876
+    },
+    {
+        "number": 25,
+        "message": "I'm implementing RAG for my project.",
+        "result": {
+            "topics": [
+                "Retrieval-Augmented Generation",
+                "project"
+            ],
+            "entities": [
+                "RAG"
+            ],
+            "intent": "implementing"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 6.114
+    },
+    {
+        "number": 26,
+        "message": "I'm working on a robotic arm.",
+        "result": {
+            "topics": [
+                "robotics",
+                "robotic arm"
+            ],
+            "entities": [
+                "robotic arm"
+            ],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 5.91
+    },
+    {
+        "number": 27,
+        "message": "I'm building a mobile app with React Native.",
+        "result": {
+            "topics": [
+                "mobile app development",
+                "React Native"
+            ],
+            "entities": [
+                "React Native"
+            ],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.818
+    },
+    {
+        "number": 28,
+        "message": "I'm creating a recommendation system.",
+        "result": {
+            "topics": [
+                "recommendation system"
+            ],
+            "entities": [],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.959
+    },
+    {
+        "number": 29,
+        "message": "I'm implementing authentication with JWT.",
+        "result": {
+            "topics": [
+                "authentication",
+                "JWT"
+            ],
+            "entities": [
+                "JWT"
+            ],
+            "intent": "implementing"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.678
+    },
+    {
+        "number": 30,
+        "message": "I'm working on a neural network from scratch.",
+        "result": {
+            "topics": [
+                "neural network"
+            ],
+            "entities": [],
+            "intent": "building"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.031
+    },
+    {
+        "number": 31,
+        "message": "My Flask API is returning a 500 error.",
+        "result": {
+            "topics": [
+                "Flask",
+                "API",
+                "HTTP 500 error"
+            ],
+            "entities": [
+                "Flask"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.608
+    },
+    {
+        "number": 32,
+        "message": "I'm debugging a memory leak in my C++ program.",
+        "result": {
+            "topics": [
+                "memory leak",
+                "C++ programming",
+                "debugging"
+            ],
+            "entities": [
+                "C++"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.041
+    },
+    {
+        "number": 33,
+        "message": "My neural network isn't learning properly.",
+        "result": {
+            "topics": [
+                "neural networks",
+                "machine learning"
+            ],
+            "entities": [],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.806
+    },
+    {
+        "number": 34,
+        "message": "I'm testing my REST API with Postman.",
+        "result": {
+            "topics": [
+                "REST API",
+                "Postman"
+            ],
+            "entities": [
+                "Postman"
+            ],
+            "intent": "testing"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 5.029
+    },
+    {
+        "number": 35,
+        "message": "My Arduino motor isn't responding.",
+        "result": {
+            "topics": [
+                "Arduino",
+                "motor control",
+                "electronics"
+            ],
+            "entities": [
+                "Arduino",
+                "motor"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 1.659
+    },
+    {
+        "number": 36,
+        "message": "I'm fixing a bug in my Python code.",
+        "result": {
+            "topics": [
+                "Python",
+                "debugging"
+            ],
+            "entities": [
+                "Python"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 5.792
+    },
+    {
+        "number": 37,
+        "message": "The database connection keeps failing.",
+        "result": {
+            "topics": [
+                "database",
+                "database connection"
+            ],
+            "entities": [
+                "database"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.36
+    },
+    {
+        "number": 38,
+        "message": "I'm debugging an issue with Docker.",
+        "result": {
+            "topics": [
+                "Docker",
+                "debugging"
+            ],
+            "entities": [
+                "Docker"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 4.658
+    },
+    {
+        "number": 39,
+        "message": "My model is overfitting the training data.",
+        "result": {
+            "topics": [
+                "machine learning",
+                "overfitting",
+                "training data"
+            ],
+            "entities": [],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.779
+    },
+    {
+        "number": 40,
+        "message": "I'm trying to fix a CUDA error.",
+        "result": {
+            "topics": [
+                "CUDA",
+                "error debugging"
+            ],
+            "entities": [
+                "CUDA"
+            ],
+            "intent": "debugging"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 5.72
+    },
+    {
+        "number": 41,
+        "message": "I'm learning karate.",
+        "result": {
+            "topics": [
+                "karate"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.597
+    },
+    {
+        "number": 42,
+        "message": "I've started learning Spanish.",
+        "result": {
+            "topics": [
+                "Spanish language",
+                "learning"
+            ],
+            "entities": [
+                "Spanish"
+            ],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 1.699
+    },
+    {
+        "number": 43,
+        "message": "I'm training for a marathon.",
+        "result": {
+            "topics": [
+                "marathon training",
+                "running"
+            ],
+            "entities": [],
+            "intent": "training"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 2.392
+    },
+    {
+        "number": 44,
+        "message": "I'm practicing guitar.",
+        "result": {
+            "topics": [
+                "music",
+                "guitar"
+            ],
+            "entities": [
+                "guitar"
+            ],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.962
+    },
+    {
+        "number": 45,
+        "message": "I'm learning photography.",
+        "result": {
+            "topics": [
+                "photography"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.93
+    },
+    {
+        "number": 46,
+        "message": "I'm playing football this weekend.",
+        "result": {
+            "topics": [
+                "football"
+            ],
+            "entities": [],
+            "intent": "playing football"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.108
+    },
+    {
+        "number": 47,
+        "message": "I'm starting a new drawing hobby.",
+        "result": {
+            "topics": [
+                "drawing",
+                "hobby"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 6.914
+    },
+    {
+        "number": 48,
+        "message": "I'm reading a book about psychology.",
+        "result": {
+            "topics": [
+                "psychology"
+            ],
+            "entities": [],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 6.262
+    },
+    {
+        "number": 49,
+        "message": "I'm taking a public speaking course.",
+        "result": {
+            "topics": [
+                "public speaking"
+            ],
+            "entities": [
+                "public speaking course"
+            ],
+            "intent": "learning"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 3.777
+    },
+    {
+        "number": 50,
+        "message": "I'm practicing meditation.",
+        "result": {
+            "topics": [
+                "meditation"
+            ],
+            "entities": [],
+            "intent": "practicing"
+        },
+        "valid_json_schema": true,
+        "latency_seconds": 6.118
+    }
+]

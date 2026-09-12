@@ -33,3 +33,12 @@ client.py
 extractor.py
 - introduced USE_GROQ(hardcoded gateway). if USE_GROQ=1, groq client is used or else ollama client is used
 - recieved the response of both llms in the same variable content
+
+12.09.2026
+- changed the extraction schema. attributes of extracted json: topics, entities, intent, summary, takeaway, response
+- summary tells about what is discussed in the convo, takeaway tells what was recommended/takeaway from this convo
+- actual response is also fetched from the llm using same prompt.
+- i have changed prompts.py accordingly to give extraction json of this format
+- i have also added two test files for testing
+- test_models.py for knowing the models given by groq llm
+- benchmark.py to compare the latency and quality of response for different models
