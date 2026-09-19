@@ -156,3 +156,185 @@ normal use, including after a restart. The next thing to verify (not
 done yet) is the corrupted-file edge case — what happens if 
 episodes.json gets damaged somehow — to make sure the app doesn't crash 
 in that situation either.
+
+### 19th September 2026
+
+## Implemented
+
+### 1. `api.py` - Created FastAPI Backend Interface
+
+`api.py` is the bridge between the frontend and the existing backend. Since the React frontend cannot directly communicate with the Python JAMES backend, `api.py` exposes the required backend functionality through HTTP endpoints.
+
+Implemented endpoints:
+
+- `GET /health` - Check whether the API is running
+- `POST /chat` - Send a message to the JAMES processing pipeline
+- `GET /episodes` - Get all stored episodes
+- `GET /episodes/{episode_id}` - Get a specific episode
+- `GET /episodes/{episode_id}/observations` - Get observations belonging to an episode
+
+---
+
+### 2. `frontend/src/services/api.js`
+
+This is the frontend's API communication layer.
+
+This file has functions corresponding to the FastAPI endpoints:
+
+- `sendMessage()`
+- `getEpisodes()`
+- `getEpisode()`
+- `getEpisodeObservations()`
+- `checkHealth()`
+
+It handles sending requests to FastAPI and converting the JSON responses back into JavaScript objects.
+
+---
+
+### 3. `Chat.jsx`
+
+This is the user interaction layer.
+
+It handles:
+
+- typing a message
+- sending it
+- maintaining conversation
+- displaying JAMES's response
+- loading state
+- errors
+- passing the backend result to the parent `App.jsx`
+
+---
+
+### 4. `App.jsx`
+
+This acts as the main frontend controller/state holder.
+
+It handles:
+
+- switching between Chat, Signals, Episode and Memory views
+- storing the latest backend result in `lastResult`
+- passing `lastResult` to the required child components
+
+This allows the backend result to be shared between multiple UI components instead of being available only inside `Chat.jsx`.
+
+---
+
+### 5. `SignalPanel.jsx`
+
+Displays the information extracted by JAMES from the user's message.
+
+Currently displays:
+
+- Topics
+- Entities
+- Intent
+- Summary
+- Takeaway
+
+---
+
+### 6. `EpisodePanel.jsx`
+
+Displays what happened to the message in JAMES's memory pipeline.
+
+Currently displays:
+
+- Processing status (`matched`, `created`, etc.)
+- Current observation
+- Selected episode
+- Episode ID
+- Topics
+- Participants
+- Related observations
+- High-level explanation of whether an episode was matched or created
+
+> Detailed episode selection/ranking reasoning is **not implemented yet** and will come with the Candidate Layer (Task 6).
+
+---
+
+### 7. `MemoryBrowser.jsx`
+
+Provides a way to browse existing JAMES memory.
+
+Implemented:
+
+- Load all episodes
+- Refresh episodes
+- Select an episode
+- View selected episode details
+- View observations belonging to that episode
+
+---
+
+##  Pending
+1. End-to-End Testing
+
+The complete frontend → FastAPI → JAMES → frontend flow still needs to be tested.
+
+2. LLM Dependency Issue
+
+Current llm/client.py imports both Groq and Ollama, while the current extractor is configured with:
+
+USE_GROQ = 0
+
+This currently causes the backend to depend on Ollama.
+
+My laptop/environment does not have the required Ollama setup, so /chat cannot currently be tested end-to-end.
+
+Action: Discuss/fix the LLM configuration with the teammate handling the LLM/extractor code. I have not modified their files.
+
+3. CORS Verification
+
+CORS configuration needs to be verified so the React frontend (localhost:5173) can communicate with FastAPI (localhost:8000).
+
+4. Final UI Polish
+
+Current UI focuses on functionality. Styling and final visual polish are intentionally left for later.
+
+5. Task 6 – Candidate Layer
+
+Current processor still uses:
+
+find_matching_episode()
+
+The planned replacement is:
+
+Observation
+    ↓
+Candidate Generation
+    ↓
+Candidate Ranking
+    ↓
+Episode Selection
+    ↓
+Processor Decision
+
+This will also allow the UI to eventually show more detailed information about why a particular episode was selected.
+
+Issue Faced Today
+Python Environment / LLM Dependency
+
+Initially Uvicorn was running from the wrong environment (Hermes Agent environment), which caused:
+
+ModuleNotFoundError: No module named 'groq'
+
+After switching to the normal Python 3.12 environment, Groq/FastAPI/Uvicorn were available, but the backend then failed on:
+
+ModuleNotFoundError: No module named 'ollama'
+
+The issue is related to the current LLM client configuration, not the FastAPI/React implementation.
+
+Current status: API and frontend implementation is in place; full integration testing is pending after the LLM configuration is resolved.
+
+### overall flow of data
+The overall data flow starts when the user enters a message in Chat.jsx. Chat passes the message and conversation data to api.js, where they are placed into a JavaScript object and serialized into JSON. api.js sends this JSON through an HTTP POST request to the /chat endpoint in api.py.
+
+FastAPI receives the HTTP request and, using the Pydantic ChatRequest model, parses and validates the JSON body into a request object. We then extract request.message and pass it to process_input(), which is the main orchestration function of the JAMES backend pipeline.
+
+Inside the processor, JAMES extracts structured information from the message, checks whether the message contains meaningful information, creates and stores an observation when appropriate, loads existing episodes, and uses the current episode-matching logic to either update an existing episode or create a new one.
+
+The processor finally returns a Python dictionary containing the extracted information, observation, episode, and processing status. FastAPI serializes this Python dictionary into a JSON HTTP response and sends it back to api.js. api.js uses response.json() to convert the JSON response into a JavaScript object and returns it to Chat.jsx.
+
+Chat uses the result to update the conversation and then passes the complete processing result upward through the onProcessed callback. App.jsx stores this result in its lastResult state. Because App is the parent of the other panels, it can pass lastResult to components such as SignalPanel and EpisodePanel. This allows multiple components to use the same backend result instead of the result being available only inside Chat.
