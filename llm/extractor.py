@@ -4,7 +4,7 @@ from .prompts import build_prompt
 from groq import RateLimitError
 from groq import APIError
 
-USE_GROQ=0
+USE_GROQ=1
 
 class Extractor:
     def __init__(self,groq_model='qwen/qwen3.8-27b',ollama_model="qwen3:8b"):

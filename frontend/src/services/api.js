@@ -28,7 +28,7 @@ export async function getEpisode(){
   return response.json();
 }
 
-export async function getEpisode(episodeId) {
+export async function getEpisodeById(episodeId) {
   const response = await fetch(
     `${API_BASE_URL}/episodes/${episodeId}`
   );
