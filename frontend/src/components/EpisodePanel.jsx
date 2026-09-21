@@ -12,99 +12,224 @@ function EpisodePanel({ result }) {
   const observation = result.observation;
 
   return (
-    <section>
-      <h2>Episode Panel</h2>
+    <section className="episode-view">
 
-      <div>
-        <h3>Processing Status</h3>
-        <p>{result.status || "unknown"}</p>
-      </div>
+        <div className="page-header">
+            <div>
+                <span className="section-label">
+                    CURRENT MEMORY STATE
+                </span>
 
-      <div>
-        <h3>Current Observation</h3>
+                <h2>Current Episode</h2>
 
-        {observation ? (
-          <>
-            <p>
-              <strong>ID:</strong> {observation.id}
-            </p>
+                <p>
+                    Inspect how JAMES handled the most recently
+                    processed message.
+                </p>
+            </div>
 
-            <p>
-              <strong>Text:</strong> {observation.text}
-            </p>
+            <div className="view-indicator">
+                <span className="indicator-dot"></span>
+                {result.status || "Unknown"}
+            </div>
+        </div>
 
-            <p>
-              <strong>Intent:</strong>{" "}
-              {observation.intent || "None"}
-            </p>
-          </>
-        ) : (
-          <p>No observation was created.</p>
-        )}
-      </div>
 
-      <div>
-        <h3>Selected Episode</h3>
+        <div className="episode-grid">
 
-        {!episode ? (
-          <p>No episode was created or matched.</p>
-        ) : (
-          <>
-            <p>
-              <strong>Episode ID:</strong>{" "}
-              {episode.episode_id}
-            </p>
+            {/* CURRENT OBSERVATION */}
+            <div className="episode-card">
 
-            <p>
-              <strong>Title:</strong>{" "}
-              {episode.title || "Untitled"}
-            </p>
+                <div className="card-heading">
+                    <span className="card-number">
+                        01
+                    </span>
 
-            <p>
-              <strong>Topics:</strong>{" "}
-              {episode.topics?.length
-                ? episode.topics.join(", ")
-                : "None"}
-            </p>
+                    <div>
+                        <span className="card-label">
+                            CURRENT OBSERVATION
+                        </span>
 
-            <p>
-              <strong>Participants:</strong>{" "}
-              {episode.participants?.length
-                ? episode.participants.join(", ")
-                : "None"}
-            </p>
+                        <h3>
+                            What JAMES recorded
+                        </h3>
+                    </div>
+                </div>
 
-            <p>
-              <strong>Related Observations:</strong>{" "}
-              {episode.related_observations?.length || 0}
-            </p>
-          </>
-        )}
-      </div>
 
-      <div>
-        <h3>Why This Episode?</h3>
+                {observation ? (
+                    <div className="episode-details">
 
-        {result.status === "matched" ? (
-          <p>
-            This observation was associated with an
-            existing episode by the current episode
-            matching logic.
-          </p>
-        ) : result.status === "created" ? (
-          <p>
-            No existing episode was selected, so JAMES
-            created a new episode for this observation.
-          </p>
-        ) : (
-          <p>
-            Episode selection information is not
-            available.
-          </p>
-        )}
-      </div>
+                        <div className="detail-row">
+                            <span>ID</span>
+                            <strong>
+                                {observation.id}
+                            </strong>
+                        </div>
+
+                        <div className="detail-row">
+                            <span>TEXT</span>
+                            <strong>
+                                {observation.text}
+                            </strong>
+                        </div>
+
+                        <div className="detail-row">
+                            <span>INTENT</span>
+                            <strong>
+                                {observation.intent || "None"}
+                            </strong>
+                        </div>
+
+                    </div>
+                ) : (
+                    <p className="empty-value">
+                        No observation was created.
+                    </p>
+                )}
+
+            </div>
+
+
+            {/* SELECTED EPISODE */}
+            <div className="episode-card">
+
+                <div className="card-heading">
+                    <span className="card-number">
+                        02
+                    </span>
+
+                    <div>
+                        <span className="card-label">
+                            SELECTED EPISODE
+                        </span>
+
+                        <h3>
+                            Where JAMES placed it
+                        </h3>
+                    </div>
+                </div>
+
+
+                {!episode ? (
+                    <p className="empty-value">
+                        No episode was created or matched.
+                    </p>
+                ) : (
+                    <div className="episode-details">
+
+                        <div className="detail-row">
+                            <span>EPISODE ID</span>
+                            <strong>
+                                {episode.episode_id}
+                            </strong>
+                        </div>
+
+                        <div className="detail-row">
+                            <span>TITLE</span>
+                            <strong>
+                                {episode.title || "Untitled"}
+                            </strong>
+                        </div>
+
+                        <div className="detail-row">
+                            <span>TOPICS</span>
+                            <strong>
+                                {episode.topics?.length
+                                    ? episode.topics.join(", ")
+                                    : "None"}
+                            </strong>
+                        </div>
+
+                        <div className="detail-row">
+                            <span>PARTICIPANTS</span>
+                            <strong>
+                                {episode.participants?.length
+                                    ? episode.participants.join(", ")
+                                    : "None"}
+                            </strong>
+                        </div>
+
+                        <div className="detail-row">
+                            <span>OBSERVATIONS</span>
+                            <strong>
+                                {episode.related_observations?.length || 0}
+                            </strong>
+                        </div>
+
+                    </div>
+                )}
+
+            </div>
+
+
+            {/* PROCESSING DECISION */}
+            <div className="episode-card full-width">
+
+                <div className="card-heading">
+                    <span className="card-number">
+                        03
+                    </span>
+
+                    <div>
+                        <span className="card-label">
+                            PROCESSING DECISION
+                        </span>
+
+                        <h3>
+                            What happened to this message?
+                        </h3>
+                    </div>
+                </div>
+
+
+                <div className="decision-panel">
+
+                    {result.status === "matched" ? (
+                        <>
+                            <strong>
+                                Existing episode selected
+                            </strong>
+
+                            <p>
+                                This observation was associated
+                                with an existing episode by the
+                                current episode matching logic.
+                            </p>
+                        </>
+                    ) : result.status === "created" ? (
+                        <>
+                            <strong>
+                                New episode created
+                            </strong>
+
+                            <p>
+                                No existing episode was selected,
+                                so JAMES created a new episode for
+                                this observation.
+                            </p>
+                        </>
+                    ) : (
+                        <>
+                            <strong>
+                                Episode selection unavailable
+                            </strong>
+
+                            <p>
+                                Episode selection information is
+                                not available for this result.
+                            </p>
+                        </>
+                    )}
+
+                </div>
+
+            </div>
+
+        </div>
+
     </section>
-  );
+);
 }
 
 export default EpisodePanel;

@@ -12,56 +12,148 @@ function App() {
   const [lastResult, setLastResult] = useState(null);
 
   return (
-    <div>
-      <header>
-        <h1>JAMES</h1>
-        <p>Persistent Adaptive Assistant</p>
+    <div className="app-shell">
 
-        <p>
-          Last status:{" "}
-          <strong>
-            {lastResult?.status || "No message processed"}
-          </strong>
-        </p>
-      </header>
+        {/* =================================================
+            HEADER
+           ================================================= */}
 
-      <nav>
-        <button onClick={() => setActiveView("chat")}>
-          Chat
-        </button>
+        <header className="app-header">
 
-        <button onClick={() => setActiveView("signals")}>
-          Signals
-        </button>
+            <div className="brand-row">
 
-        <button onClick={() => setActiveView("episode")}>
-          Episode
-        </button>
+                <div className="brand-mark">
 
-        <button onClick={() => setActiveView("memory")}>
-          Memory
-        </button>
-      </nav>
+                    <div>
+                        <h1>JAMES</h1>
 
-      <main>
-        {activeView === "chat" && (
-          <Chat onProcessed={setLastResult} />
-        )}
+                        <p>
+                            Persistent Adaptive Assistant
+                        </p>
+                    </div>
 
-        {activeView === "signals" && (
-          <SignalPanel result={lastResult} />
-        )}
+                </div>
 
-        {activeView === "episode" && (
-          <EpisodePanel result={lastResult} />
-        )}
 
-        {activeView === "memory" && (
-          <MemoryBrowser />
-        )}
-      </main>
+                <div className="system-status">
+
+                    <span className="status-dot"></span>
+
+                    System Ready
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        {/* =================================================
+            NAVIGATION
+           ================================================= */}
+
+        <nav className="app-nav">
+
+            <button
+                className={`nav-item ${
+                    activeView === "chat"
+                        ? "active"
+                        : ""
+                }`}
+                onClick={() => setActiveView("chat")}
+            >
+                Conversation
+            </button>
+
+
+            <button
+                className={`nav-item ${
+                    activeView === "signals"
+                        ? "active"
+                        : ""
+                }`}
+                onClick={() => setActiveView("signals")}
+            >
+                Signals
+            </button>
+
+
+            <button
+                className={`nav-item ${
+                    activeView === "episode"
+                        ? "active"
+                        : ""
+                }`}
+                onClick={() => setActiveView("episode")}
+            >
+                Current Episode
+            </button>
+
+
+            <button
+                className={`nav-item ${
+                    activeView === "memory"
+                        ? "active"
+                        : ""
+                }`}
+                onClick={() => setActiveView("memory")}
+            >
+                Memory & History
+            </button>
+
+        </nav>
+
+
+        {/* =================================================
+            MAIN CONTENT
+           ================================================= */}
+
+        <main className="main-content">
+
+            {activeView === "chat" && (
+                <Chat
+                    onProcessed={setLastResult}
+                />
+            )}
+
+            {activeView === "signals" && (
+                <SignalPanel
+                    result={lastResult}
+                />
+            )}
+
+            {activeView === "episode" && (
+                <EpisodePanel
+                    result={lastResult}
+                />
+            )}
+
+            {activeView === "memory" && (
+                <MemoryBrowser />
+            )}
+
+        </main>
+
+
+        {/* =================================================
+            FOOTER
+           ================================================= */}
+
+        <footer className="app-footer">
+
+            <span>
+                JAMES Phase 2&nbsp;&nbsp;|&nbsp;&nbsp;
+                Developer Interface
+            </span>
+
+            <span>
+                Building Persistent AI for Real-world Use
+            </span>
+
+        </footer>
+
     </div>
-  );
+);
 }
 
 export default App;

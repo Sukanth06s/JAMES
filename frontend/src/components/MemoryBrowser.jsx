@@ -61,58 +61,311 @@ function MemoryBrowser() {
         );
     }
 
-    // 6. Main UI Return JSX
     return (
-        <section>
-            <h2>Memory Browser</h2>
-            {error && (
-                <p style={{ color: "red" }}>
-                    <strong>Error:</strong> {error}
-                </p>
-            )}
-            <div>
-                <h3>Episodes</h3>
-                <button onClick={loadEpisodes}>Refresh</button>
+    <section className="memory-view">
 
-                {episodes.length === 0 ? (
-                    <p>No episodes found.</p>
-                ) : (
-                    <ul>
-                        {episodes.map((episode) => (
-                            <li key={episode.episode_id}>
-                                <button onClick={() => handleEpisodeClick(episode.episode_id)}>
-                                    {episode.title || episode.episode_id}
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+        <div className="page-header">
+            <div>
+                <span className="section-label">
+                    LONG-TERM MEMORY
+                </span>
+
+                <h2>Memory & History</h2>
+
+                <p>
+                    Browse episodes and observations stored by
+                    JAMES across previous interactions.
+                </p>
             </div>
 
-            {selectedEpisode && (
-                <div>
-                    <h3>Selected Episode</h3>
-                    <p><strong>ID:</strong> {selectedEpisode.episode_id}</p>
-                    <p><strong>Title:</strong> {selectedEpisode.title || "Untitled"}</p>
-                    <p><strong>Topics:</strong> {selectedEpisode.topics?.join(", ") || "None"}</p>
-                    <p><strong>Participants:</strong> {selectedEpisode.participants?.join(", ") || "None"}</p>
+            <div className="view-indicator">
+                <span className="indicator-dot"></span>
+                {episodes.length}{" "}
+                {episodes.length === 1 ? "Episode" : "Episodes"}
+            </div>
+        </div>
 
-                    <h4>Observations</h4>
-                    {observations.length === 0 ? (
-                        <p>No observations found.</p>
-                    ) : (
-                        <ul>
-                            {observations.map((observation) => (
-                                <li key={observation.id}>
-                                    {observation.text}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+
+        {/* ERROR */}
+        {error && (
+            <div className="memory-error">
+                <strong>Memory service error:</strong>
+                <span>{error}</span>
+            </div>
+        )}
+
+
+        <div className="memory-layout">
+
+            {/* =================================================
+                LEFT — EPISODE HISTORY
+               ================================================= */}
+
+            <div className="memory-list-card">
+
+                <div className="memory-list-header">
+
+                    <div>
+                        <span className="card-label">
+                            STORED EPISODES
+                        </span>
+
+                        <h3>
+                            Episode History
+                        </h3>
+                    </div>
+
+                    <button
+                        className="refresh-button"
+                        onClick={loadEpisodes}
+                    >
+                        Refresh
+                    </button>
+
                 </div>
-            )}
-        </section>
-    );
+
+
+                {episodes.length === 0 ? (
+
+                    <div className="memory-empty">
+
+                        <div className="empty-symbol">
+                            M
+                        </div>
+
+                        <strong>
+                            No episodes found
+                        </strong>
+
+                        <p>
+                            JAMES has not stored any episodes yet.
+                        </p>
+
+                    </div>
+
+                ) : (
+
+                    <div className="episode-list">
+
+                        {episodes.map((episode) => (
+
+                            <button
+                                key={episode.episode_id}
+                                className={`episode-list-item ${
+                                    selectedEpisode?.episode_id ===
+                                    episode.episode_id
+                                        ? "selected"
+                                        : ""
+                                }`}
+                                onClick={() =>
+                                    handleEpisodeClick(
+                                        episode.episode_id
+                                    )
+                                }
+                            >
+
+                                <div className="episode-list-content">
+
+                                    <span className="episode-list-title">
+                                        {episode.title ||
+                                            "Untitled Episode"}
+                                    </span>
+
+                                    <span className="episode-list-id">
+                                        {episode.episode_id}
+                                    </span>
+
+                                </div>
+
+                                <span className="episode-arrow">
+                                    →
+                                </span>
+
+                            </button>
+
+                        ))}
+
+                    </div>
+
+                )}
+
+            </div>
+
+
+            {/* =================================================
+                RIGHT — SELECTED EPISODE
+               ================================================= */}
+
+            <div className="memory-detail-card">
+
+                {!selectedEpisode ? (
+
+                    <div className="memory-placeholder">
+
+                        <div className="empty-symbol">
+                            01
+                        </div>
+
+                        <h3>
+                            Select an episode
+                        </h3>
+
+                        <p>
+                            Choose an episode from the history
+                            panel to inspect its stored memory
+                            and observations.
+                        </p>
+
+                    </div>
+
+                ) : (
+
+                    <>
+
+                        {/* EPISODE HEADER */}
+
+                        <div className="memory-detail-header">
+
+                            <div>
+
+                                <span className="card-label">
+                                    SELECTED MEMORY
+                                </span>
+
+                                <h3>
+                                    {selectedEpisode.title ||
+                                        "Untitled Episode"}
+                                </h3>
+
+                            </div>
+
+                            <span className="memory-episode-id">
+                                {selectedEpisode.episode_id}
+                            </span>
+
+                        </div>
+
+
+                        {/* EPISODE METADATA */}
+
+                        <div className="memory-meta-grid">
+
+                            <div className="memory-meta-item">
+
+                                <span>
+                                    TOPICS
+                                </span>
+
+                                <strong>
+                                    {selectedEpisode.topics?.length
+                                        ? selectedEpisode.topics.join(", ")
+                                        : "None"}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="memory-meta-item">
+
+                                <span>
+                                    PARTICIPANTS
+                                </span>
+
+                                <strong>
+                                    {selectedEpisode.participants?.length
+                                        ? selectedEpisode.participants.join(", ")
+                                        : "None"}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* OBSERVATIONS */}
+
+                        <div className="observations-section">
+
+                            <div className="observations-header">
+
+                                <div>
+
+                                    <span className="card-label">
+                                        RECORDED OBSERVATIONS
+                                    </span>
+
+                                    <h4>
+                                        Conversation Memory
+                                    </h4>
+
+                                </div>
+
+                                <span className="observation-count">
+                                    {observations.length}
+                                </span>
+
+                            </div>
+
+
+                            {observations.length === 0 ? (
+
+                                <p className="empty-value">
+                                    No observations found for this
+                                    episode.
+                                </p>
+
+                            ) : (
+
+                                <div className="observation-list">
+
+                                    {observations.map(
+                                        (observation, index) => (
+
+                                            <div
+                                                className="observation-item"
+                                                key={observation.id}
+                                            >
+
+                                                <span className="observation-index">
+                                                    {String(index + 1).padStart(
+                                                        2,
+                                                        "0"
+                                                    )}
+                                                </span>
+
+                                                <div>
+
+                                                    <span className="observation-id">
+                                                        {observation.id}
+                                                    </span>
+
+                                                    <p>
+                                                        {observation.text}
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                        )
+                                    )}
+
+                                </div>
+
+                            )}
+
+                        </div>
+
+                    </>
+
+                )}
+
+            </div>
+
+        </div>
+
+    </section>
+);
 }
 
 export default MemoryBrowser;

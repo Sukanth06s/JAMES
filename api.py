@@ -51,7 +51,7 @@ def get_episode(episode_id:str):
         detail=f"Episode '{episode_id}' not found"
     )
 
-@app.get("/episode/{episode_id}/observations")
+@app.get("/episodes/{episode_id}/observations")
 def get_episode_observations(episode_id:str):
     episodes=load_all_episodes()
 
