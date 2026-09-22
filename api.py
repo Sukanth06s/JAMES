@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from core.processor import process_input
-from storage.db import load_all_episodes,load_all_observations
+from storage.db import load_all_episodes,load_all_observations,load_all_candidates
 
 app=FastAPI(
     title="JAMES API",
@@ -80,3 +80,6 @@ def get_episode_observations(episode_id:str):
         if observation.get("id") in observation_ids
     ]
 
+@app.get("/candidates")
+def get_candidates():
+    return load_all_candidates()

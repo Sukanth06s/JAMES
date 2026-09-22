@@ -16,7 +16,7 @@ functions exported:
 import json       #reading and writing json
 import os         #checking whether files / directories exists
 from config import(
-    MEMORY_PATH, OBSERVATIONS_FILE, EPISODES_FILE, USER_PROFILE_FILE, ID_COUNTERS_FILE,
+    MEMORY_PATH, OBSERVATIONS_FILE, CANDIDATES_FILE,EPISODES_FILE, USER_PROFILE_FILE, ID_COUNTERS_FILE,
 )
 
 # ── ensure_memory_dir ────────────────────────────────────────────────────────
@@ -196,4 +196,36 @@ def update_episode(updated_episode:dict):
     print(f"[db]WARNING: episode {updated_episode.get('episode_id')} not found - appending instead")
     episodes.append(updated_episode)
     save_json(EPISODES_FILE,episodes)
-    
+
+def load_all_candidates():
+        if not os.path.exists(CANDIDATES_FILE):
+            return []
+        with open(CANDIDATES_FILE,"r") as f:
+            return json.load(f)
+
+def append_candidate(candidate):
+        candidates=load_all_candidates()
+        candidates.append(candidate)
+
+        with open(CANDIDATES_FILE,"w") as f:
+            json.dump(candidates,f,indent=4)
+
+def update_candidate(updated_candidate):
+        candidates=load_all_candidates()
+
+        for i,candidate in enumerate(candidates):
+            if candidate.get("candidate_id")==updated_candidate.get("candidate_id"):
+                candidates[i]=updated_candidate
+                break
+
+        with open(CANDIDATES_FILE,"w") as f:
+            json.dump(candidates,f,indent=4)
+
+def delete_candidate(candidate_id):
+        candidates=load_all_candidates()
+        candidates=[
+            candidate
+            for candidate in candidates
+            if candidate.get("candidate_id")!=candidate_id
+        ]
+        save_json(CANDIDATES_FILE,candidates)

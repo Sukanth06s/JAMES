@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import {
     getEpisode, // Changed from getEpisodes to match your api.js export
-    getEpisodeById,
+    getEpisodeById,getCandidates,
     getEpisodeObservations
 } from "../services/api";
 
 function MemoryBrowser() {
     // 1. State Declarations
     const [episodes, setEpisodes] = useState([]);
+    const [candidates, setCandidates] = useState([]);
     const [selectedEpisode, setSelectedEpisodeState] = useState(null);
     const [observations, setObservations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,6 +17,7 @@ function MemoryBrowser() {
     // 2. Lifecycle hook (Triggers loadEpisodes on mount)
     useEffect(() => {
         loadEpisodes();
+        loadCandidates();
     }, []);
 
     // 3. Helper function to load all episodes
@@ -32,6 +34,18 @@ function MemoryBrowser() {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function loadCandidates() {
+        try {
+            setError("");
+
+            const data = await getCandidates();
+            setCandidates(data);
+        } catch (err) {
+            console.error(err);
+            setError(err.message);
         }
     }
 
@@ -182,6 +196,134 @@ function MemoryBrowser() {
                                 </span>
 
                             </button>
+
+                        ))}
+
+                    </div>
+
+                )}
+
+            </div>
+                        
+
+
+            {/* =================================================
+                CANDIDATE MEMORY
+               ================================================= */}
+
+            <div className="memory-list-card">
+
+                <div className="memory-list-header">
+
+                    <div>
+                        <span className="card-label">
+                            ACTIVE CANDIDATES
+                        </span>
+
+                        <h3>
+                            Candidate Memory
+                        </h3>
+                    </div>
+
+                    <button
+                        className="refresh-button"
+                        onClick={loadCandidates}
+                    >
+                        Refresh
+                    </button>
+
+                </div>
+
+                {candidates.length === 0 ? (
+
+                    <div className="memory-empty">
+
+                        <div className="empty-symbol">
+                            C
+                        </div>
+
+                        <strong>
+                            No candidates found
+                        </strong>
+
+                        <p>
+                            No provisional memories are currently active.
+                        </p>
+
+                    </div>
+
+                ) : (
+
+                    <div className="episode-list">
+
+                        {candidates.map((candidate) => (
+                            <div
+                            className="episode-list-item"
+                            key={candidate.candidate_id}
+                        >
+
+                            <div className="episode-list-content">
+
+                                <span className="episode-list-title">
+                                    {candidate.title || "Untitled Candidate"}
+                                </span>
+
+                                <span className="episode-list-id">
+                                    {candidate.candidate_id}
+                                </span>
+
+                                <div className="candidate-details">
+
+                    <div>
+                        <span className="candidate-detail-label">
+                            TOPICS
+                        </span>
+
+                        <span>
+                            {candidate.topics?.length
+                                ? candidate.topics.join(", ")
+                                : "None"}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span className="candidate-detail-label">
+                            PARTICIPANTS
+                        </span>
+
+                        <span>
+                            {candidate.participants?.length
+                                ? candidate.participants.join(", ")
+                                : "None"}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span className="candidate-detail-label">
+                            OBSERVATIONS
+                        </span>
+
+                        <span>
+                    
+                            {candidate.related_observations?.length || 0}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span className="candidate-detail-label">
+                            STATUS
+                        </span>
+
+                        <span>
+                            {candidate.status || "candidate"}
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
                         ))}
 

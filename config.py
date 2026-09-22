@@ -20,8 +20,11 @@ MEMORY_PATH ="./memory/"
 OBSERVATIONS_FILE="./memory/observations.json"
 # every raw observations from user input is appended here
 # format : json array [{...},{...}]
+CANDIDATES_FILE="./memory/candidates.json"
+#temporary memories built b4 becoming into episode
+#format: json array [{...},{...}]
 EPISODES_FILE="./memory/episodes.json" 
-# grouped structured context built from observations
+# grouped structured context built from candidate
 #format : json array 
 USER_PROFILE_FILE="./memory/user_profile.json"
 # long term stable user facts

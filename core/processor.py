@@ -20,17 +20,12 @@ this is pipeline orchestrator - it connect every module:
 
 from core.observation import create_observation
 from llm.extractor import Extractor    
-from core.episode import ( 
-    update_episode_with_observation,
-    find_matching_episode,
-    create_episode
-)
-from storage.db import(
-    append_observation,
-    load_all_episodes,
-    append_episode,
-    update_episode,
-)
+from core.candidate import process_observation
+from storage.db import append_observation
+from core.observation import create_observation
+from llm.extractor import Extractor
+from core.candidate import process_observation
+from storage.db import append_observation
 
 # ── Module-level extractor instance ──────────────────────────────────────────
 # Created once so we don't reload the model on every message.

@@ -63,3 +63,13 @@ export async function checkHealth() {
 
   return response.json();
 }
+
+export async function getCandidates(){
+    const response=await fetch(`${API_BASE_URL}/candidates`);
+
+    if (!response.ok) {
+        throw new Error(`Failed to load candidates: ${response.status}`);
+    }
+
+    return response.json();
+}
