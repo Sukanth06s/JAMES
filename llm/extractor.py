@@ -1,5 +1,5 @@
 import json
-from .client import groq_client,ollama_client
+from .client import groq_client
 from .prompts import build_prompt
 from groq import RateLimitError
 from groq import APIError
@@ -26,16 +26,17 @@ class Extractor:
                 )
                 content=response.choices[0].message.content
             else:
-                response=ollama_client.chat(
-                    model=self.ollama_model,
-                    messages=[
-                        {
-                            "role": "user",
-                            "content": prompt
-                        }
-                    ]
-                )
-                content=response["message"]["content"]
+     #           response=ollama_client.chat(
+     #               model=self.ollama_model,
+   #                 messages=[
+  #                      {
+  #                          "role": "user",
+  #                          "content": prompt
+  #                      }
+  #                  ]
+   #             )
+#                content=response["message"]["content"]
+                print("")
             content = content.replace("```json", "")
             content = content.replace("```", "")
             content = content.strip()

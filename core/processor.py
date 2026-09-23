@@ -25,7 +25,9 @@ from storage.db import append_observation
 from core.observation import create_observation
 from llm.extractor import Extractor
 from core.candidate import process_observation
-from storage.db import append_observation
+from storage.db import append_observation,update_episode,load_all_episodes,append_episode
+from core.episode import find_matching_episode,update_episode_with_observation,create_episode
+
 
 # ── Module-level extractor instance ──────────────────────────────────────────
 # Created once so we don't reload the model on every message.

@@ -380,7 +380,7 @@ function MemoryBrowser() {
                                 </h3>
 
                             </div>
-
+                            <span style={{fontSize: "small"}}> {selectedEpisode.last_updated.split(" ")[0]}</span>
                             <span className="memory-episode-id">
                                 {selectedEpisode.episode_id}
                             </span>
