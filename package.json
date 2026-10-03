@@ -1,0 +1,27 @@
+{
+  "name": "james",
+  "version": "1.0.0",
+  "description": "James is a locally run personal AI system, that is capable of remembering and retrieval of relevant information. \r Im using ollama's models for the AI engine. Currently working on desiging the memory architecture.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "concurrently \"python -m uvicorn backend.api:app --reload\" \"cd frontend && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sukanth06s/JAMES.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Sukanth06s/JAMES/issues"
+  },
+  "homepage": "https://github.com/Sukanth06s/JAMES#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
