@@ -338,3 +338,235 @@ Inside the processor, JAMES extracts structured information from the message, ch
 The processor finally returns a Python dictionary containing the extracted information, observation, episode, and processing status. FastAPI serializes this Python dictionary into a JSON HTTP response and sends it back to api.js. api.js uses response.json() to convert the JSON response into a JavaScript object and returns it to Chat.jsx.
 
 Chat uses the result to update the conversation and then passes the complete processing result upward through the onProcessed callback. App.jsx stores this result in its lastResult state. Because App is the parent of the other panels, it can pass lastResult to components such as SignalPanel and EpisodePanel. This allows multiple components to use the same backend result instead of the result being available only inside Chat.
+
+
+# 23 SEPTEMBER 2026
+
+Yes — I’d make it **more concise and team-friendly**, while keeping the descriptive style of your existing `suraj.md`. The version you pasted is too detailed for a teammate update.
+
+Use this:
+
+````md
+
+
+## Task 6 - Candidate Layer
+
+## Implemented
+
+### 1. `core/candidate.py` - Candidate Memory Layer
+
+Implemented the Candidate Layer as an intermediate stage between observations and permanent episodes.
+
+Instead of immediately creating an episode for every observation, related observations are first grouped into a temporary candidate. A candidate is promoted to an episode after 3 related observations.
+
+Implemented:
+
+- Candidate creation
+- Candidate matching
+- Candidate updating
+- Candidate promotion
+- Candidate deletion after promotion
+
+Candidate matching uses:
+
+- Topic Jaccard Similarity - 40%
+- Entity Jaccard Similarity - 60%
+- Similarity threshold - `0.60`
+
+The final score is:
+
+```text
+Score = 0.4 × Topic Jaccard + 0.6 × Entity Jaccard
+````
+
+---
+
+### 2. `storage/db.py` - Candidate Storage
+
+Added storage support for candidates using the existing JSON storage system.
+
+Implemented:
+
+* `append_candidate()`
+* `load_all_candidates()`
+* `update_candidate()`
+* `delete_candidate()`
+
+Candidates are stored in:
+
+```text
+memory/candidates.json
+```
+
+---
+
+### 3. `core/processor.py` - Candidate Integration
+
+Updated `process_input()` to use the Candidate Layer instead of directly matching/creating episodes.
+
+Previous flow:
+
+```text
+Observation
+    ↓
+find_matching_episode()
+    ↓
+Matched Episode / New Episode
+```
+
+Current flow:
+
+```text
+Observation
+    ↓
+Candidate Matching
+    ↓
+Create / Update Candidate
+    ↓
+3 Related Observations
+    ↓
+Promote to Episode
+```
+
+The processor now returns the candidate/episode result along with the observation, extracted signals, and status.
+
+---
+
+### 4. `config.py` - Candidate Storage Configuration
+
+Added:
+
+```text
+CANDIDATES_FILE="./memory/candidates.json"
+```
+
+This keeps candidate storage separate from observations and episodes.
+
+---
+
+### 5. `api.py` - Candidate API
+
+Added:
+
+```text
+GET /candidates
+```
+
+This endpoint returns the currently active candidates from storage so that the frontend can display provisional memories.
+
+---
+
+### 6. `frontend/src/services/api.js` - Candidate API Function
+
+Added:
+
+```text
+getCandidates()
+```
+
+This communicates with the `/candidates` endpoint and returns the candidate data to the frontend.
+
+---
+
+### 7. `MemoryBrowser.jsx` - Candidate Memory UI
+
+Extended the existing Memory Browser with an **Active Candidates** section.
+
+The UI displays:
+
+* Candidate title
+* Candidate ID
+* Topics
+* Participants
+* Number of related observations
+* Status
+
+Also added candidate refresh functionality while preserving the existing Episode History and Observation views.
+
+---
+
+## Testing
+
+Tested the main Candidate Layer lifecycle:
+
+```text
+Observation 1 → Candidate created
+Observation 2 → Same candidate updated
+Observation 3 → Candidate promoted
+                         ↓
+                    Episode created
+                         ↓
+                   Candidate deleted
+```
+
+Also tested:
+
+* Jaccard similarity calculation
+* Candidate storage
+* Candidate API (`GET /candidates`)
+* Candidate frontend display
+* Candidate refresh
+* Existing episode browsing after the UI changes
+
+A temporary candidate was used to independently verify the frontend Candidate UI.
+
+---
+
+## Issues Fixed
+
+### Candidate Storage Bug
+
+Fixed an issue where `load_all_candidates` was referenced without calling the function:
+
+```text
+load_all_candidates
+```
+
+was corrected to:
+
+```text
+load_all_candidates()
+```
+
+### Test Data Duplication
+
+Repeated lifecycle tests appended test observations to the existing observation storage, resulting in duplicate test data. This was identified as test-data pollution rather than a candidate matching issue.
+
+### Frontend JSX Error
+
+While adding the Candidate Memory section, an extra closing `</div>` caused a Vite JSX parsing error. The JSX structure was corrected and the frontend compiled successfully.
+
+### Python Environment Issue
+
+Uvicorn initially ran using the wrong Python environment and produced:
+
+```text
+ModuleNotFoundError: No module named 'groq'
+```
+
+The backend was then run using the working Python 3.12 environment.
+
+---
+
+## Current Status
+
+Task 6 has been implemented across:
+
+```text
+Candidate Logic
+      ↓
+Storage
+      ↓
+Processor
+      ↓
+FastAPI
+      ↓
+Frontend
+```
+
+The candidate lifecycle from **Observation → Candidate → Episode** is implemented, and active candidates can now be viewed through the Memory Browser.
+
+```
+
+This keeps **everything important we actually did**, but removes the excessive explanations and repeated details from the longer version.
+```

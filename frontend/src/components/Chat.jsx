@@ -1,9 +1,13 @@
 import { useState  } from "react";
 import { sendMessage } from "../services/api";
 
-function Chat({onProcessed}){
+function Chat({
+    conversation,
+    setConversation,
+    onProcessed
+}){
     const [message,setMessage]=useState("");
-    const [conversation,setConversation]=useState([]);
+    
     const [loading,setLoading]=useState(false);
     const [error,setError]=useState("");
 

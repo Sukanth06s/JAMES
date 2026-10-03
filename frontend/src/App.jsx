@@ -10,6 +10,7 @@ import "./App.css";
 function App() {
   const [activeView, setActiveView] = useState("chat");
   const [lastResult, setLastResult] = useState(null);
+  const [conversation, setConversation]=useState([]);
 
   return (
     <div className="app-shell">
@@ -112,6 +113,8 @@ function App() {
 
             {activeView === "chat" && (
                 <Chat
+                    conversation={conversation}
+                    setConversation={setConversation}
                     onProcessed={setLastResult}
                 />
             )}

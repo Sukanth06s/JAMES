@@ -198,28 +198,27 @@ def update_episode(updated_episode:dict):
     save_json(EPISODES_FILE,episodes)
 
 def load_all_candidates():
-        if not os.path.exists(CANDIDATES_FILE):
-            return []
-        with open(CANDIDATES_FILE,"r") as f:
-            return json.load(f)
+    return load_json(CANDIDATES_FILE,default=[])
 
 def append_candidate(candidate):
-        candidates=load_all_candidates()
-        candidates.append(candidate)
-
-        with open(CANDIDATES_FILE,"w") as f:
-            json.dump(candidates,f,indent=4)
+    append_json(CANDIDATES_FILE,candidate)
 
 def update_candidate(updated_candidate):
-        candidates=load_all_candidates()
+    candidates=load_all_candidates()
 
-        for i,candidate in enumerate(candidates):
-            if candidate.get("candidate_id")==updated_candidate.get("candidate_id"):
-                candidates[i]=updated_candidate
-                break
+    for i,candidate in enumerate(candidates):
+        if candidate.get("candidate_id")==updated_candidate.get("candidate_id"):
+            candidates[i]=updated_candidate
+            save_json(CANDIDATES_FILE,candidate)
+            return
+    print(
+         f"[db] WARNING: candidate "
+        f"{updated_candidate.get('candidate_id')} not found - appending instead"
+    )
 
-        with open(CANDIDATES_FILE,"w") as f:
-            json.dump(candidates,f,indent=4)
+    candidates.append(updated_candidate)
+    save_json(CANDIDATES_FILE,candidate)
+    
 
 def delete_candidate(candidate_id):
         candidates=load_all_candidates()
